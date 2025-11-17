@@ -254,7 +254,7 @@ public class BeanClassRefreshAgent {
         ReflectionHelper.set(bean, BeanAttributesImpl.class, "alternative", attributes.isAlternative());
 
         InjectionTargetFactory factory = new InjectionTargetFactoryImpl(annotatedType, bean.getWebBeansContext());
-        InjectionTarget injectionTarget = factory.createInjectionTarget(bean);
+        InjectionTarget injectionTarget = factory.createInjectionTarget((Bean)bean);
         ReflectionHelper.set(bean, InjectionTargetBean.class, "injectionTarget", injectionTarget);
 
         if (injectionTarget instanceof AbstractProducer) {

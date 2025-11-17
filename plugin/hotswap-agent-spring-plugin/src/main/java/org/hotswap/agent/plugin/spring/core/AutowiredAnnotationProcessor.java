@@ -23,47 +23,78 @@ import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 public class AutowiredAnnotationProcessor {
-    private static AgentLogger LOGGER = AgentLogger.getLogger(AutowiredAnnotationProcessor.class);
+  private static final AgentLogger LOGGER = AgentLogger.getLogger(AutowiredAnnotationProcessor.class);
 
-    public static void processSingletonBeanInjection(DefaultListableBeanFactory beanFactory) {
-        try {
-            Map<String, AutowiredAnnotationBeanPostProcessor> postProcessors = beanFactory.getBeansOfType(
-                AutowiredAnnotationBeanPostProcessor.class);
-            if (postProcessors.isEmpty()) {
-                LOGGER.debug("AutowiredAnnotationProcessor not exist");
-                return;
-            }
-            AutowiredAnnotationBeanPostProcessor postProcessor = postProcessors.values().iterator().next();
-            boolean postProcessPropertyValuesNotExists = false;
-            for (String beanName : beanFactory.getBeanDefinitionNames()) {
-                Object object = beanFactory.getSingleton(beanName);
-                if (object != null) {
-                    if (postProcessPropertyValuesNotExists) {
-                        // spring 6.x
-                        postProcessor.postProcessProperties(null, object, beanName);
-                        continue;
-                    }
-                    try {
-                        // from spring 3.2.x to 5.x
-                        postProcessor.postProcessPropertyValues(null, null, object, beanName);
-                    } catch (NoSuchMethodError e) {
-                        // spring 6.x
-                        postProcessor.postProcessProperties(null, object, beanName);
-                        postProcessPropertyValuesNotExists = true;
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("AutowiredAnnotationProcessor maybe not exist", e);
-            } else {
-                LOGGER.warning("AutowiredAnnotationProcessor maybe not exist : " + e.getMessage());
-            }
+  public static void processSingletonBeanInjection(DefaultListableBeanFactory beanFactory) {
+    try {
+      Map<String, AutowiredAnnotationBeanPostProcessor> postProcessors = beanFactory.getBeansOfType(
+          AutowiredAnnotationBeanPostProcessor.class);
+      if (postProcessors.isEmpty()) {
+        LOGGER.debug("AutowiredAnnotationProcessor not exist");
+        return;
+      }
+      AutowiredAnnotationBeanPostProcessor postProcessor = postProcessors.values().iterator().next();
+      for (String beanName : beanFactory.getBeanDefinitionNames()) {
+        Object object = beanFactory.getSingleton(beanName);
+        if (object != null) {
+          boolean done = postProcessPropertyValuesProcessed(postProcessor, object, beanName);
+          done |= postProcessPropertiesProcessed(postProcessor, object, beanName);
+          if (!done) {
+            throw new RuntimeException("AutowiredAnnotationBeanPostProcessor did not process properly");
+          }
         }
+      }
+    } catch (Throwable e) {
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("AutowiredAnnotationProcessor maybe not exist", e);
+      } else {
+        LOGGER.warning("AutowiredAnnotationProcessor maybe not exist : " + e.getMessage());
+      }
     }
+  }
+
+  // from spring 3.2.x to 5.x
+  private static boolean postProcessPropertyValuesProcessed(
+      AutowiredAnnotationBeanPostProcessor postProcessor,
+      Object object,
+      String beanName
+  ) {
+    try {
+      Method postProcessPropertyValues =
+          AutowiredAnnotationBeanPostProcessor.class.getMethod("postProcessPropertyValues",
+              PropertyValues.class, PropertyDescriptor[].class, Object.class, String.class);
+      postProcessPropertyValues.invoke(postProcessor, null, null, object, beanName);
+      return true;
+    } catch (NoSuchMethodError | NoSuchMethodException ignored) {
+      return false;
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  // spring 6.x
+  private static boolean postProcessPropertiesProcessed(
+      AutowiredAnnotationBeanPostProcessor postProcessor,
+      Object object,
+      String beanName
+  ) {
+    try {
+      Method postProcessProperties =
+          AutowiredAnnotationBeanPostProcessor.class.getMethod("postProcessProperties", PropertyValues.class,
+              Object.class, String.class);
+      postProcessProperties.invoke(postProcessor, null, object, beanName);
+      return true;
+    } catch (NoSuchMethodError | NoSuchMethodException ignored) {
+      return false;
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
 }
