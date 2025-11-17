@@ -1,22 +1,32 @@
 #!/bin/sh
-# simple script to run all Weld versions from 2.0 up to latest.
-# this should be replaced by build sever in the future
 
-# fail with first failed test
+# Simple script to run Deltaspike version 2.0.1
+
+# Fail with first failed test
 set -e
 
-# run clean package with all unit tests
-function testOWB4 {
-    echo "Running with OWB $1"
-    mvn -POWB22 -Dowb.version=$1 clean package
+# Run clean package with all unit tests
+testOWB4() {
+    echo "################################################################"
+    echo "########      Running with Deltaspike $1, OWB $2       ########"
+    echo "################################################################"
+    mvn -POWB4 -Ddeltaspike.version=$1 -Dowb.version=$2 clean package
 }
 
-function testWeld5 {
-    echo "Running with Weld $1"
-    mvn -PWeld  -Dorg.jboss.weld.version=$2 -Dorg.jboss.weld-api.version=$2 clean package
+testWeld5() {
+    echo "################################################################"
+    echo "########      Running with Deltaspike $1, Weld $2       ########"
+    echo "################################################################"
+    mvn -PWeld -Ddeltaspike.version=$1 -Dorg.jboss.weld.version=$2 -Dorg.jboss.weld-api.version=$2 clean package
 }
 
-### start of j11 incompatible versions
-testOWB2 4.0.2
+testDeltaspike() {
+    testOWB4 "$1" 4.0.2
 
-testWeld 5.1.0.Final 5.0.SP3
+    testWeld5 "$1" 6.0.3.Final 6.0.Final
+    testWeld5 "$1" 5.1.6.Final 5.0.SP3
+}
+
+# Run tests for different Deltaspike versions
+
+testDeltaspike 2.0.1    # Aug 07, 2025

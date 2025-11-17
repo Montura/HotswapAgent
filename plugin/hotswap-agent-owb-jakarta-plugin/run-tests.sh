@@ -1,13 +1,19 @@
 #!/bin/sh
-# simple script to run all Weld versions from 2.0 up to latest.
-# this should be replaced by build sever in the future
 
-# fail with first failed test
+# Simple script to run OWB version 4.0.3
+
+# Fail with first failed test
 set -e
 
-function testCDI2 {
-    echo "Running with OWB $1"
+# Run clean package with all unit tests
+
+testCDI2() {
+    echo "################################################################"
+    echo "########          Running with OWB_4 $1              ###########"
+    echo "################################################################"
     mvn -Dowb.version=$1 clean package
 }
 
-testCDI2 4.0.2
+# Run tests for different OWB versions
+
+testCDI2 4.0.3    # Dec 15, 2024

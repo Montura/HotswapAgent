@@ -13,7 +13,7 @@
     <artifactId>hotswap-agent-hibernate-plugin</artifactId>
 
     <properties>
-        <org.hibernateframework.version>5.3.14.Final</org.hibernateframework.version>
+        <org.hibernateframework.version>5.6.15.Final</org.hibernateframework.version>
         <jaxb.version>2.3.0</jaxb.version>
     </properties>
 
@@ -57,6 +57,13 @@
             <version>${jaxb.version}</version>
             <scope>test</scope>
         </dependency>
+
+      <dependency>
+        <groupId>org.javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>3.23.1-GA</version>
+        <scope>test</scope>
+      </dependency>
 
     </dependencies>
 

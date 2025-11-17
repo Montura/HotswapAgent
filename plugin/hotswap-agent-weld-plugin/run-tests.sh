@@ -1,20 +1,30 @@
 #!/bin/sh
-# simple script to run all Weld versions from 2.0 up to latest.
-# this should be replaced by build sever in the future
 
-# fail with first failed test
+# Simple script to run Weld versions from 2.3.5 up to 3.1.9
+
+# Fail with first failed test
 set -e
 
-# run clean package with all unit tests
-function testWeld2 {
-    echo "Running with Weld $1"
-    mvn -Dorg.jboss.weld-se.version=$1 -PWeld2 clean compile
-    JAVA_HOME=/usr/lib/jvm/java-8-openjdk mvn -Ddcevm.test.arguments=-XXaltjvm=dcevm -Dorg.jboss.weld.version=$1 -PWeld2 test
+# Run clean package with all unit tests
+testWeld2() {
+    echo "################################################################"
+    echo "########          Running with Weld_2 $1             ###########"
+    echo "################################################################"
+    mvn -Dorg.jboss.weld-se.version=$1 -PWeld2 clean package
 }
 
-function testWeld3 {
-    echo "Running with Weld $1 $2"
+testWeld3() {
+    echo "################################################################"
+    echo "########          Running with Weld_3 $1 $2          ###########"
+    echo "################################################################"
     mvn -Dorg.jboss.weld.version=$1 -Dorg.jboss.weld-spi.version=$2 -PWeld3 clean package
 }
 
-# testWeld3 3.1.7.Final 3.1.SP1
+# Run tests for different Weld versions
+
+# todo: update tests with newer API
+#testWeld3 4.0.3.Final 4.0.SP1   # Feb 15, 2022
+testWeld3 3.1.9.Final 3.1.SP4   # Feb 15, 2022
+
+testWeld2 2.4.8.Final   # Sep 26, 2018
+testWeld2 2.3.5.Final   # Jun 24, 2016

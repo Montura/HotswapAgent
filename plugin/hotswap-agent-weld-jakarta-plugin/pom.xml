@@ -40,8 +40,8 @@
             </activation>
 
             <properties>
-                <org.jboss.weld.version>5.1.2.Final</org.jboss.weld.version>
-                <org.jboss.weld-spi.version>5.0.SP3</org.jboss.weld-spi.version>
+                <org.jboss.weld.version>6.0.3.Final</org.jboss.weld.version>
+                <org.jboss.weld-spi.version>6.0.Final</org.jboss.weld-spi.version>
             </properties>
 
             <dependencies>
@@ -55,6 +55,13 @@
                     <groupId>org.jboss.weld</groupId>
                     <artifactId>weld-spi</artifactId>
                     <version>${org.jboss.weld-spi.version}</version>
+                </dependency>
+
+                <!-- For weld version > 6.0.0 -->
+                <dependency>
+                    <groupId>org.jboss.weld.servlet</groupId>
+                    <artifactId>weld-servlet-shaded</artifactId>
+                    <version>${org.jboss.weld.version}</version>
                 </dependency>
             </dependencies>
         </profile>

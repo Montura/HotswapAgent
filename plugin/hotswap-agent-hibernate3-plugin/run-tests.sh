@@ -1,16 +1,18 @@
 #!/bin/sh
-# simple script to run all Spring versions from 3.0 up to latest.
-# this should be replaced by build sever in the future
 
-# fail with first failed test
+# Simple script to run Hibernate3 version 3.6.10.
+
+# Fail with first failed test
 set -e
 
-# run clean package with all unit tests
-function test {
-    echo "Running with Hibernate $1"
+# Run clean package with all unit tests
+run_tests() {
+    echo "################################################################"
+    echo "########         Running with Hibernate3 $1          ###########"
+    echo "################################################################"
     mvn -Dorg.hibernateframework.version=$1 clean package
 }
 
-# test following Hibernate versions
-# test 4.0.0.Final
-test 3.6.10.Final
+# Run tests for different Hibernate3 versions
+
+run_tests 3.6.10.Final   # Feb 09, 2012

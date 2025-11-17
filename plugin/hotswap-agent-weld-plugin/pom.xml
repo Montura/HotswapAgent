@@ -37,14 +37,14 @@
             <id>Weld2</id>
 
             <properties>
-                <org.jboss.weld-se.version>2.3.5.Final</org.jboss.weld-se.version>
+                <org.jboss.weld-se.version>2.4.8.Final</org.jboss.weld-se.version>
             </properties>
 
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.weld.se</groupId>
                     <artifactId>weld-se</artifactId>
-                    <version>2.3.5.Final</version>
+                    <version>${org.jboss.weld-se.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -58,7 +58,7 @@
 
             <properties>
                 <org.jboss.weld.version>3.1.7.Final</org.jboss.weld.version>
-                <org.jboss.weld-spi.version>3.1.SP1</org.jboss.weld-spi.version>
+                <org.jboss.weld-spi.version>3.1.SP4</org.jboss.weld-spi.version>
             </properties>
 
             <dependencies>

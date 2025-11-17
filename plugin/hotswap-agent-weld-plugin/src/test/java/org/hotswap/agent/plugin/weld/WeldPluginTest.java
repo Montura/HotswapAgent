@@ -61,7 +61,6 @@ import org.junit.runner.RunWith;
  * @author Vladimir Dvorak
  */
 @RunWith(WeldJUnit4Runner.class)
-@Ignore
 public class WeldPluginTest {
 
     public <T> T getBeanInstance(Class<T> beanClass) {

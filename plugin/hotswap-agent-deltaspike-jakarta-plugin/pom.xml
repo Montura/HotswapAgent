@@ -12,7 +12,7 @@
     <artifactId>hotswap-agent-deltaspike-jakarta-plugin</artifactId>
 
     <properties>
-        <deltaspike.version>2.0.0</deltaspike.version>
+        <deltaspike.version>2.0.1</deltaspike.version>
     </properties>
 
     <dependencies>
@@ -120,6 +120,12 @@
         </dependency>
 
         <dependency>
+          <groupId>jakarta.enterprise</groupId>
+          <artifactId>jakarta.enterprise.cdi-api</artifactId>
+          <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.7.1</version>
@@ -149,7 +155,7 @@
             </activation>
 
             <properties>
-                <owb.version>4.0.2</owb.version>
+                <owb.version>4.0.3</owb.version>
                 <cdicontainer.version>owb-${owb.version}</cdicontainer.version>
             </properties>
 
@@ -201,8 +207,7 @@
             <id>Weld</id>
 
             <properties>
-                <org.jboss.weld.version>5.1.0.Final</org.jboss.weld.version>
-                <org.jboss.weld-spi.version>5.0.SP3</org.jboss.weld-spi.version>
+                <org.jboss.weld.version>6.0.3.Final</org.jboss.weld.version>
                 <cdicontainer.version>weld-${weld.version}</cdicontainer.version>
             </properties>
 
