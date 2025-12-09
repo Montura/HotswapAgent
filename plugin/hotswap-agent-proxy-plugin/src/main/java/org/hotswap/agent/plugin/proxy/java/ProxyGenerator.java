@@ -43,8 +43,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.UUID;
 
-import sun.security.action.GetBooleanAction;
-
 /**
  * ProxyGenerator contains the code to generate a dynamic proxy class for the java.lang.reflect.Proxy API.
  *
@@ -314,8 +312,7 @@ public class ProxyGenerator {
     private final static String handlerFieldName = "h";
 
     /** debugging flag for saving generated class files */
-    private final static boolean saveGeneratedFiles = java.security.AccessController.doPrivileged(
-            new GetBooleanAction("java.lang.reflect.ProxyGenerator.saveGeneratedFiles")).booleanValue();
+    private final static boolean saveGeneratedFiles = false;
 
     /**
      * Generate a public proxy class given a name and a list of proxy interfaces.
